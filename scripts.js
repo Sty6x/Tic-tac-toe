@@ -5,9 +5,9 @@ let GameBoardModule = (() => {
     let gameBoardContainer = document.getElementById('game-board-container')
 
     const GAMEBOARD = [
-        ['X', 'o', '0'],
-        ['o', 'x', 'o'],
-        ['x', 'o', 'x']
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
     ]
 
     function createCells() {
@@ -26,19 +26,24 @@ let GameBoardModule = (() => {
     }
     return {
         gameBoardContainer,
-        createCells
+        createCells,
+        GAMEBOARD
     }
 })()
 
 
 
 function player() {
-    let cells = GameBoardModule.createCells()
-    let GameboardContainer = GameBoardModule.gameBoardContainer;
+    let GameBoard = GameBoardModule
+    let cells = GameBoard.createCells()
+    let GameboardContainer = GameBoard.gameBoardContainer;
 
     function getCellPosition() {
         GameboardContainer.addEventListener('click', (e) => {
-            console.log(e.target)
+            let target = e.target
+            if (!target.matches('.cell')) return
+            console.log(target)
+            e.target.innerHTML = 'x'
         })
     }
     return {
