@@ -18,32 +18,39 @@ let GameBoardModule = (() => {
                 cell.classList.add('cell')
                 // [0][0] [0][1] [0][2]
                 cell.innerHTML = GAMEBOARD[row][col]
+                cell.setAttribute('id', GAMEBOARD[row] + GAMEBOARD[cell])
+
             }
         }
-        return {
-            cell
-        };
     }
     return {
         gameBoardContainer,
         createCells,
-        GAMEBOARD
+        // GAMEBOARD
     }
 })()
 
 
 
-function player() {
+function player(pick) {
     let GameBoard = GameBoardModule
-    let cells = GameBoard.createCells()
+    // let cells = GameBoard.createCells()
     let GameboardContainer = GameBoard.gameBoardContainer;
+    // let GameBoardArray = GameBoard.GAMEBOARD;
+
+    function aI() {
+        console.log('time')
+        // console.log(GameBoardArray)
+    }
 
     function getCellPosition() {
         GameboardContainer.addEventListener('click', (e) => {
             let target = e.target
             if (!target.matches('.cell')) return
-            console.log(target)
-            e.target.innerHTML = 'x'
+            e.target.innerHTML = pick
+            // GameBoardArray
+            console.log(target.id )
+            setTimeout(aI, 500)
         })
     }
     return {
@@ -51,5 +58,6 @@ function player() {
     }
 }
 
-let player1 = player()
+GameBoardModule.createCells()
+let player1 = player('o')
 player1.getCellPosition()
