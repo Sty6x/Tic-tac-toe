@@ -3,9 +3,8 @@ console.log('heyho')
 
 let GameBoardModule = (() => {
     let gameBoardContainer = document.getElementById('game-board-container')
-
     let GAMEBOARD = [];
-
+    
     function createCells() {
         for (let row = 0; row < 3; row++) { 
             //makes a 2d array  
@@ -26,20 +25,21 @@ let GameBoardModule = (() => {
     return {
         gameBoardContainer,
         createCells,
-        GAMEBOARD
+        GAMEBOARD,
+        // cells
     }
 })()
 
 
 
 function player(pick) {
+    let cells = document.getElementsByClassName('cell')
     let GameBoard = GameBoardModule
-    // let cells = GameBoard.createCells()
     let GameboardContainer = GameBoard.gameBoardContainer;
     let GameBoardArray = GameBoard.GAMEBOARD;
+    let cellArray = Array.from(cells)
 
     function aI() {
-        // console.log(GameBoardArray)
         //randomizer set to ID and set innerHTML
         let IdRandomizer = {
             IdNum:3,
@@ -49,20 +49,30 @@ function player(pick) {
         }
         let firstNum = IdRandomizer.randomNum()
         let secondNum = IdRandomizer.randomNum()
-        // let firstNum secondNum = Math.floor(Math.random() * 3)
-        console.log(firstNum+secondNum)
-        
-        
+        let randomID = `${firstNum}${secondNum}`
+        setTimeout(
+            ()=>{
+                // console.log(typeof cellArray)
+                cellArray.forEach(cell => {
+                    // console.log(cell.id)
+                    if(randomID == cell.id){
+                        cell.innerHTML = 'XX'
+                        console.log(randomID,cell.id)
+                    }
+                });
+            
+            }
+            , 500)
+   
     }
 
     function getCellPosition() {
         GameboardContainer.addEventListener('click', (e) => {
             let target = e.target
             if (!target.matches('.cell')) return
-            e.target.innerHTML = pick
-            console.log(GameBoardArray)
-            console.log(target)
-            setTimeout(aI, 500)
+            target.innerHTML = pick
+            console.log('player' +' '+target.id)
+            aI(target,e)
         })
     }
     return {
