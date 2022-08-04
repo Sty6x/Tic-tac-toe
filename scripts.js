@@ -35,27 +35,35 @@ let GameBoardModule = (() => {
 function aI() {
     let cells = document.getElementsByClassName('cell')
     let cellArray = Array.from(cells)
-    function enemyMove(playerID){
-        let IdRandomizer = {
-            IdNum: 3,
-            randomNum() {
-                return Math.floor(Math.random() * this.IdNum)
-            }
-        }
-        let firstNum = IdRandomizer.randomNum()
-        let secondNum = IdRandomizer.randomNum()
+
+    function IdRandomizer(num) {
+        return Math.floor(Math.random() * num)
+    }
+    
+    function enemyMove(playerID) {
+        let firstNum = IdRandomizer(3)
+        let secondNum = IdRandomizer(3)
         let aIidentifier = `${firstNum}${secondNum}`
-    cellArray.forEach(cell => {
-        if (aIidentifier == cell.id && cell.textContent == '') {
-            console.log(cell)
-            cell.textContent = 'X'
-            console.log('enemy ' + cell.id)
+        cellArray.forEach(cell => {
+            if (aIidentifier == cell.id && cell.textContent == '') {
+                // console.log(cell.id)
+                cell.textContent = 'X'
+                console.log('enemy ' + cell.id)
+                // IdRandomizer() 
 
-        }
+            } 
+            else if (aIidentifier == cell.id) {
+                enemyMove()
+                console.log('same ID ' + cell.id + ' <cellid || playerID> ' + playerID)
+                console.log('same ID ' + cell.id + ' <cellid || aiId> ' + aIidentifier)
+                let i = 0
+            }
 
-    })
-}
+        })
+    }
+
     return {
+      
         enemyMove
     }
 }
@@ -68,75 +76,32 @@ function player(pick) {
     let cellArray = Array.from(cells)
     let Ai = aI()
 
-    // turn into function that runs if playerID is !== AI Identifier when mouse click
-    // and so we can loop this function everytime if playerID is == AI Identifier
-    // function aI(playerID) {
-
-    //     let randomize = {
-    //         randId: 3,
-    //         randomizeID: () => {
-    //             console.log('randomize')
-    //             return Math.floor(Math.random() * 3)
-    //         }
-
-    //     }
-    //     // function randomizeID(){
-    //     // }
-    //     let firstNum = randomize.randomizeID()
-    //     let secondNum = randomize.randomizeID()
-    //     let aIidentifier = `${firstNum}${secondNum}`
-
-    //     cellArray.forEach(cell => {
-    //         if (aIidentifier == cell.id && cell.textContent == '') {
-    //             // console.log(cell)
-    //             cell.textContent = 'X'
-    //             console.log('enemy ' + cell.id)
-    //             randomize.randomizeID()
-
-    //         }
-    //         let i = 0
-            
-
-    //         // dont invoke or run this, run this only when the condition is true otherwise invoke
-    //         // the above code
-    //         if(aIidentifier == playerID || cell.id == aIidentifier){
-    //             do{
-    //                 randomize.randomizeID()
-    //                 console.log(`assigned var ${firstNum}${secondNum}`)
-    //                 console.log(`from  ai Identifier ${aIidentifier}`)
-    //             }
-    //             while (aIidentifier !== cell.id || aIidentifier !== playerID)
-    //         }
-    //     });
-    //     return {
-
-    //         aIidentifier
-    //     }
-
-    // }
-
-    function getPlayerPosition() {
+    function playerMove() {
         GameboardContainer.addEventListener('click', (e) => {
             let playerID = e.target.id
             if (!e.target.matches('.cell')) return
             e.target.textContent = pick
             console.log('player' + ' ' + playerID)
-            Ai.enemyMove(playerID)
+            // Ai.enemyMove(playerID)
+
 
 
         })
     }
     return {
-        getPlayerPosition
+        playerMove
     }
 }
 
 GameBoardModule.gameBoardContainer.addEventListener('click', (e) => {
-    if (e.target.textContent == 'X') {
-        console.log('there is x')
-    }
+    // console.log(aI().aIidentifier)
+    aI().enemyMove()
+
+    // if (e.target.textContent == 'X') {
+    //     console.log('there is x')
+    // }
 })
 
 GameBoardModule.createCells()
 let player1 = player('O')
-player1.getPlayerPosition()
+// player1.playerMove()
