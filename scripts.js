@@ -4,9 +4,9 @@ console.log('heyho')
 let GameBoardModule = (() => {
     let gameBoardContainer = document.getElementById('game-board-container')
     let GAMEBOARD = [];
-    
+
     function createCells() {
-        for (let row = 0; row < 3; row++) { 
+        for (let row = 0; row < 3; row++) {
             //makes a 2d array  
             GAMEBOARD.push([row])
             //removes the first element that includes the row elemenet
@@ -26,11 +26,39 @@ let GameBoardModule = (() => {
         gameBoardContainer,
         createCells,
         GAMEBOARD,
-        // cells
     }
 })()
 
 
+
+
+function aI() {
+    let cells = document.getElementsByClassName('cell')
+    let cellArray = Array.from(cells)
+    function enemyMove(playerID){
+        let IdRandomizer = {
+            IdNum: 3,
+            randomNum() {
+                return Math.floor(Math.random() * this.IdNum)
+            }
+        }
+        let firstNum = IdRandomizer.randomNum()
+        let secondNum = IdRandomizer.randomNum()
+        let aIidentifier = `${firstNum}${secondNum}`
+    cellArray.forEach(cell => {
+        if (aIidentifier == cell.id && cell.textContent == '') {
+            console.log(cell)
+            cell.textContent = 'X'
+            console.log('enemy ' + cell.id)
+
+        }
+
+    })
+}
+    return {
+        enemyMove
+    }
+}
 
 function player(pick) {
     let cells = document.getElementsByClassName('cell')
@@ -38,48 +66,77 @@ function player(pick) {
     let GameboardContainer = GameBoard.gameBoardContainer;
     let GameBoardArray = GameBoard.GAMEBOARD;
     let cellArray = Array.from(cells)
+    let Ai = aI()
 
-    function aI() {
-        //randomizer set to ID and set innerHTML
-        let IdRandomizer = {
-            IdNum:3,
-            randomNum (){
-                return Math.floor(Math.random()*this.IdNum)
-            }
-        }
-        let firstNum = IdRandomizer.randomNum()
-        let secondNum = IdRandomizer.randomNum()
-        let randomID = `${firstNum}${secondNum}`
-        setTimeout(
-            ()=>{
-                // console.log(typeof cellArray)
-                cellArray.forEach(cell => {
-                    // console.log(cell.id)
-                    if(randomID == cell.id){
-                        cell.innerHTML = 'XX'
-                        console.log(randomID,cell.id)
-                    }
-                });
+    // turn into function that runs if playerID is !== AI Identifier when mouse click
+    // and so we can loop this function everytime if playerID is == AI Identifier
+    // function aI(playerID) {
+
+    //     let randomize = {
+    //         randId: 3,
+    //         randomizeID: () => {
+    //             console.log('randomize')
+    //             return Math.floor(Math.random() * 3)
+    //         }
+
+    //     }
+    //     // function randomizeID(){
+    //     // }
+    //     let firstNum = randomize.randomizeID()
+    //     let secondNum = randomize.randomizeID()
+    //     let aIidentifier = `${firstNum}${secondNum}`
+
+    //     cellArray.forEach(cell => {
+    //         if (aIidentifier == cell.id && cell.textContent == '') {
+    //             // console.log(cell)
+    //             cell.textContent = 'X'
+    //             console.log('enemy ' + cell.id)
+    //             randomize.randomizeID()
+
+    //         }
+    //         let i = 0
             
-            }
-            , 500)
-   
-    }
 
-    function getCellPosition() {
+    //         // dont invoke or run this, run this only when the condition is true otherwise invoke
+    //         // the above code
+    //         if(aIidentifier == playerID || cell.id == aIidentifier){
+    //             do{
+    //                 randomize.randomizeID()
+    //                 console.log(`assigned var ${firstNum}${secondNum}`)
+    //                 console.log(`from  ai Identifier ${aIidentifier}`)
+    //             }
+    //             while (aIidentifier !== cell.id || aIidentifier !== playerID)
+    //         }
+    //     });
+    //     return {
+
+    //         aIidentifier
+    //     }
+
+    // }
+
+    function getPlayerPosition() {
         GameboardContainer.addEventListener('click', (e) => {
-            let target = e.target
-            if (!target.matches('.cell')) return
-            target.innerHTML = pick
-            console.log('player' +' '+target.id)
-            aI(target,e)
+            let playerID = e.target.id
+            if (!e.target.matches('.cell')) return
+            e.target.textContent = pick
+            console.log('player' + ' ' + playerID)
+            Ai.enemyMove(playerID)
+
+
         })
     }
     return {
-        getCellPosition
+        getPlayerPosition
     }
 }
 
+GameBoardModule.gameBoardContainer.addEventListener('click', (e) => {
+    if (e.target.textContent == 'X') {
+        console.log('there is x')
+    }
+})
+
 GameBoardModule.createCells()
-let player1 = player('o')
-player1.getCellPosition()
+let player1 = player('O')
+player1.getPlayerPosition()
