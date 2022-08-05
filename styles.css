@@ -47,14 +47,20 @@ table {
 	border-spacing: 0;
 }
 
-
+.main-wrapper{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 10em;
+}
 
 #game-board-container{
     display: grid;
     padding: 2em;
     grid-template-columns: repeat(3,minmax(100px,1fr));
     grid-template-rows: repeat(3,minmax(100px,1fr));
-
+	width: 600px;
+	height: 600px;
 }
 
 .cell{
