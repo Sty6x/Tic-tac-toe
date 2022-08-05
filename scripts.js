@@ -78,13 +78,13 @@ function player(pick) {
     let GameBoard = GameBoardModule
     let GameboardContainer = GameBoard.gameBoardContainer;
     let Ai = aI()
-    
+
     function playerMove(enemy) {
         GameboardContainer.addEventListener('click', (e) => {
             let playerID = e.target.id
             if (!e.target.matches('.cell')) return
             e.target.textContent = pick
-            console.log('player' + ' ' + playerID)
+            // console.log('player' + ' ' + playerID)
             // if player wants to play with a computer
             // enemy.enemyMove(playerID)
         })
@@ -101,12 +101,11 @@ function player(pick) {
 // mock area
 // var click = false
 GameBoardModule.gameBoardContainer.addEventListener('click', (e) => {
-    console.log(e.target)
+    // console.log(e.target)
     // click = true
     // console.log(click)
-    // gameLogicModule.playGame()
-
-
+    // click = false
+    // console.log(click)
 })
 
 // GameBoardModule.createBoard()
@@ -123,21 +122,27 @@ let gameLogicModule = (function () {
     let playerOne = player('O')
     let playerTwo = player('X')
     let AI = aI()
-    let click = false;
-    boardModule.gameBoardContainer.addEventListener('click',e=>{
-        if(e.target.matches('.cell')){
-            click = true
-            console.log(click)
-        }else{
-            return
-        }
-        // console.log(click)
+    var click = false;
 
-    })
     function playGame(){
-        
+        boardModule.gameBoardContainer.addEventListener('click',e=>{
+            if (e.target.matches('.cell')) {
+                click = true
+                console.log(click)
+                
+            }
+            if(click){
+                click = false
+                console.log(click)
+                console.log('player Xs turn')
+                playerTwo.playerMove()    
+            }else{
+                playerOne.playerMove()    
+            }
+        })
+
         createGame()
-        playerOne.playerMove()
+        playerOne.playerMove()    
         
     }
 
