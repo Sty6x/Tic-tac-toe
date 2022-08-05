@@ -82,14 +82,6 @@ function player(pick) {
         let playerID = e.target.id
         if (!e.target.matches('.cell')) return
         e.target.textContent = pick
-        // console.log('player' + ' ' + playerID)
-        // if player wants to play with a computer
-        // enemy.enemyMove(playerID)
-        // GameboardContainer.addEventListener('click', (e) => {
-
-        // })
-
-
     }
     return {
         playerMove,
@@ -120,67 +112,50 @@ let gameLogicModule = (function () {
 
 
 
-
         let playerOneClick = {
-            didClick: false,
-            isTurn: false
+            isTurn: true
         }
         let playerTwoClick = {
-            didClick: false,
             isTurn: false
         }
-        function turns() {
+
+        function turns(event) {
+
             console.log('Check Turns\n', {
                 'Player One turn': playerOneClick.isTurn
             }, {
                 'Player Two turn': playerTwoClick.isTurn
             })
 
-
-            playerOneClick.isTurn = true;
+            // playerOneClick.isTurn = true;
             if (playerOneClick.isTurn) {
-                boardModule.gameBoardContainer.addEventListener('click',e=>{
-                    playerOne.playerMove(e)
-                    playerOneClick.isTurn = false;
-                    playerTwoClick.isTurn = true;
+                playerOne.playerMove(event)
+                playerOneClick.isTurn = false;
+                playerTwoClick.isTurn = true;
+
+                console.table('click from player 1\n', {
+                    'Player One turn': playerOneClick.isTurn
+                }, {
+                    'Player Two turn': playerTwoClick.isTurn
                 })
-                
-                console.log('from first click for player 1\n', {
+            } else if(playerTwoClick.isTurn) {
+                playerTwo.playerMove(event)
+                playerOneClick.isTurn = true;
+                playerTwoClick.isTurn = false;
+
+                console.table('click from player 2\n', {
                     'Player One turn': playerOneClick.isTurn
                 }, {
                     'Player Two turn': playerTwoClick.isTurn
                 })
             }
-                
-            
-            // OVERWRITING PLAYER 1
-            if (playerTwoClick.isTurn) {
-                // console.log('run from player 2')
-                boardModule.gameBoardContainer.addEventListener('click',e=>{
-                    playerTwo.playerMove(e)
-                    playerTwoClick.isTurn = false;
-                    playerOneClick.isTurn = true;
-                })
-                
-                console.log('from first click for player 2\n', {
-                    'Player One turn': playerOneClick.isTurn
-                }, {
-                    'Player Two turn': playerTwoClick.isTurn
-                })
-            }
-            
-            console.log('Check Changes\n', {
-                'Player One turn': playerOneClick.isTurn
-            }, {
-                'Player Two turn': playerTwoClick.isTurn
-            })
 
         }
 
-        
+
         // click in invoke click invoke click invoke
-        boardModule.gameBoardContainer.addEventListener('click', e => {
-            turns()
+        boardModule.gameBoardContainer.addEventListener('click', event => {
+            turns(event)
 
         })
         createGame()
