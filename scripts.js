@@ -5,7 +5,7 @@ let GameBoardModule = (() => {
     let gameBoardContainer = document.getElementById('game-board-container')
     let GAMEBOARD = [];
 
-    function createCells() {
+    function createBoard() {
         for (let row = 0; row < 3; row++) {
             //makes a 2d array  
             GAMEBOARD.push([row])
@@ -24,7 +24,7 @@ let GameBoardModule = (() => {
     }
     return {
         gameBoardContainer,
-        createCells,
+        createBoard,
         GAMEBOARD,
     }
 })()
@@ -39,20 +39,23 @@ function aI() {
     function IdRandomizer(num) {
         return Math.floor(Math.random() * num)
     }
-    
+
+
     function enemyMove(playerID) {
+        console.log('called')
         let firstNum = IdRandomizer(3)
         let secondNum = IdRandomizer(3)
         let aIidentifier = `${firstNum}${secondNum}`
         cellArray.forEach(cell => {
             if (aIidentifier == cell.id && cell.textContent == '') {
-                // console.log(cell.id)
-                cell.textContent = 'X'
-                console.log('enemy ' + cell.id)
-                // IdRandomizer() 
+                setTimeout(
+                    ()=>{
+                        cell.textContent = 'X'
+                        console.log('enemy ' + cell.id)
+                    }
+                    ,500)
 
-            } 
-            else if (aIidentifier == cell.id) {
+            } else if (aIidentifier == cell.id) {
                 enemyMove()
                 console.log('same ID ' + cell.id + ' <cellid || playerID> ' + playerID)
                 console.log('same ID ' + cell.id + ' <cellid || aiId> ' + aIidentifier)
@@ -63,45 +66,88 @@ function aI() {
     }
 
     return {
-      
+        IdRandomizer,
         enemyMove
     }
 }
 
+
+
+// MAKE 2 PLAYERS DUMBASS AHAHHAHA
 function player(pick) {
-    let cells = document.getElementsByClassName('cell')
     let GameBoard = GameBoardModule
     let GameboardContainer = GameBoard.gameBoardContainer;
-    let GameBoardArray = GameBoard.GAMEBOARD;
-    let cellArray = Array.from(cells)
     let Ai = aI()
-
-    function playerMove() {
+    
+    function playerMove(enemy) {
         GameboardContainer.addEventListener('click', (e) => {
             let playerID = e.target.id
             if (!e.target.matches('.cell')) return
             e.target.textContent = pick
             console.log('player' + ' ' + playerID)
-            // Ai.enemyMove(playerID)
-
-
-
+            // if player wants to play with a computer
+            // enemy.enemyMove(playerID)
         })
+ 
     }
     return {
-        playerMove
+        playerMove,
+        pick,
+  
     }
 }
 
-GameBoardModule.gameBoardContainer.addEventListener('click', (e) => {
-    // console.log(aI().aIidentifier)
-    aI().enemyMove()
 
-    // if (e.target.textContent == 'X') {
-    //     console.log('there is x')
-    // }
+// mock area
+// var click = false
+GameBoardModule.gameBoardContainer.addEventListener('click', (e) => {
+    console.log(e.target)
+    // click = true
+    // console.log(click)
+    // gameLogicModule.playGame()
+
+
 })
 
-GameBoardModule.createCells()
-let player1 = player('O')
-// player1.playerMove()
+// GameBoardModule.createBoard()
+// let player1 = player('O')
+// player1.playerMove(aI())
+
+
+// Do Game logic first and then after that do displayControllers
+
+let gameLogicModule = (function () {
+    // handles the game logic
+    let boardModule = GameBoardModule
+    let createGame = boardModule.createBoard
+    let playerOne = player('O')
+    let playerTwo = player('X')
+    let AI = aI()
+    let click = false;
+    boardModule.gameBoardContainer.addEventListener('click',e=>{
+        if(e.target.matches('.cell')){
+            click = true
+            console.log(click)
+        }else{
+            return
+        }
+        // console.log(click)
+
+    })
+    function playGame(){
+        
+        createGame()
+        playerOne.playerMove()
+        
+    }
+
+    return{
+        playGame
+    }
+})()
+
+gameLogicModule.playGame()
+
+let displayControllers = (function () {
+    // handles the display in browser
+})()
