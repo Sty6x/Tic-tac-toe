@@ -49,11 +49,10 @@ function aI() {
         cellArray.forEach(cell => {
             if (aIidentifier == cell.id && cell.textContent == '') {
                 setTimeout(
-                    ()=>{
+                    () => {
                         cell.textContent = 'X'
                         console.log('enemy ' + cell.id)
-                    }
-                    ,500)
+                    }, 500)
 
             } else if (aIidentifier == cell.id) {
                 enemyMove()
@@ -84,33 +83,21 @@ function player(pick) {
             let playerID = e.target.id
             if (!e.target.matches('.cell')) return
             e.target.textContent = pick
+            enemy.isTurn =true
             // console.log('player' + ' ' + playerID)
             // if player wants to play with a computer
             // enemy.enemyMove(playerID)
         })
- 
+
+        return enemy
     }
     return {
         playerMove,
         pick,
-  
+
     }
 }
 
-
-// mock area
-// var click = false
-GameBoardModule.gameBoardContainer.addEventListener('click', (e) => {
-    // console.log(e.target)
-    // click = true
-    // console.log(click)
-    // click = false
-    // console.log(click)
-})
-
-// GameBoardModule.createBoard()
-// let player1 = player('O')
-// player1.playerMove(aI())
 
 
 // Do Game logic first and then after that do displayControllers
@@ -122,31 +109,41 @@ let gameLogicModule = (function () {
     let playerOne = player('O')
     let playerTwo = player('X')
     let AI = aI()
-    var click = false;
+    let playerOneClick = {
+        didClick: false,
+        isTurn: false
+    }
+    let playerTwoClick = {
+        didClick: false,
+        isTurn: false
+    }
 
-    function playGame(){
-        boardModule.gameBoardContainer.addEventListener('click',e=>{
+
+    function playGame() {
+        boardModule.gameBoardContainer.addEventListener('click', e => {
+            // console.log(playerOneClick.didPlayerOneClick)
+            //checks if cell is clicked and if cell is clicked then click is true
             if (e.target.matches('.cell')) {
-                click = true
-                console.log(click)
-                
+               
+                playerOneClick.isTurn = true;
+                if (playerOneClick.isTurn == true) {
+                    playerOne.playerMove(playerTwoClick)
+                // playerTwoClick.didClick = true;
+                    // playerTwoClick.isTurn = true;
+                }
+                if(playerTwoClick.isTurn){
+                    playerTwo.playerMove()
+                }
             }
-            if(click){
-                click = false
-                console.log(click)
-                console.log('player Xs turn')
-                playerTwo.playerMove()    
-            }else{
-                playerOne.playerMove()    
-            }
+
         })
 
         createGame()
-        playerOne.playerMove()    
-        
+        // playerOne.playerMove()
+
     }
 
-    return{
+    return {
         playGame
     }
 })()
