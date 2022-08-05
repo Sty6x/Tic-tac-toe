@@ -1,6 +1,3 @@
-console.log('heyho')
-
-
 let GameBoardModule = (() => {
     let gameBoardContainer = document.getElementById('game-board-container')
     let GAMEBOARD = [];
@@ -104,61 +101,55 @@ let gameLogicModule = (function () {
     let playerOne = player('O')
     let playerTwo = player('X')
     let AI = aI()
-
-
+    
+    
+    
     function playGame() {
+        console.log('Tic-Tac-Toe is running')
+        
+        // click in invoke click invoke click invoke
+        boardModule.gameBoardContainer.addEventListener('click', event => {
+            if(event.target.matches('.cell')){   
+                playerTurns(event)
+            }
+        })
+        createGame()
+        
+    }
+    
+    let playerOneClick = {isTurn: true}
+    let playerTwoClick = Object.assign({isTurn:false})
 
-        console.log('playGame is running')
+    function playerTurns(event,playerOneTurn = true, playerTwoTurn = false) {
+        console.log('Check Turns\n', {
+            'Player One turn': playerOneClick.isTurn
+        }, {
+            'Player Two turn': playerTwoClick.isTurn
+        })
 
+        if (playerOneClick.isTurn) {
+            playerOne.playerMove(event)
+            playerOneClick.isTurn = false;
+            playerTwoClick.isTurn = true;
 
-
-        let playerOneClick = {
-            isTurn: true
-        }
-        let playerTwoClick = {
-            isTurn: false
-        }
-
-        function turns(event) {
-
-            console.log('Check Turns\n', {
+            console.table('click from player 1\n', {
                 'Player One turn': playerOneClick.isTurn
             }, {
                 'Player Two turn': playerTwoClick.isTurn
             })
+        } else if(playerTwoClick.isTurn) {
+            playerTwo.playerMove(event)
 
-            // playerOneClick.isTurn = true;
-            if (playerOneClick.isTurn) {
-                playerOne.playerMove(event)
-                playerOneClick.isTurn = false;
-                playerTwoClick.isTurn = true;
+            // resets isTurn on both players
+            playerOneClick.isTurn = true;
+            playerTwoClick.isTurn = false;
 
-                console.table('click from player 1\n', {
-                    'Player One turn': playerOneClick.isTurn
-                }, {
-                    'Player Two turn': playerTwoClick.isTurn
-                })
-            } else if(playerTwoClick.isTurn) {
-                playerTwo.playerMove(event)
-                playerOneClick.isTurn = true;
-                playerTwoClick.isTurn = false;
-
-                console.table('click from player 2\n', {
-                    'Player One turn': playerOneClick.isTurn
-                }, {
-                    'Player Two turn': playerTwoClick.isTurn
-                })
-            }
-
+            console.table('click from player 2\n', {
+                'Player One turn': playerOneClick.isTurn
+            }, {
+                'Player Two turn': playerTwoClick.isTurn
+            })
         }
-
-
-        // click in invoke click invoke click invoke
-        boardModule.gameBoardContainer.addEventListener('click', event => {
-            turns(event)
-
-        })
-        createGame()
 
     }
 
