@@ -30,6 +30,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+	background-color: rgb(20, 20, 20);
 }
 ol, ul {
 	list-style: none;
@@ -64,9 +65,8 @@ table {
 }
 
 .cell{
-
     outline: black solid 1px;
-    background-color: aqua;
+    background-color: rgb(101, 101, 101);
     display: flex;
     justify-content: center;
     align-items: center;

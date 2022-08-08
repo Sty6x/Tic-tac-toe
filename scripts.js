@@ -69,8 +69,6 @@ function aI() {
 }
 
 
-
-// MAKE 2 PLAYERS DUMBASS AHAHHAHA
 function player(pick) {
     let GameBoard = GameBoardModule
 
@@ -84,25 +82,38 @@ function player(pick) {
         // aI().enemyMove()
     }
 
+    function getVertAndDiag(arr, nth) {
+        // let cell = [];
+        let cell;
+        for (let i = 0; i < arr.length; i += nth) {
+            cell = arr[i]
+            console.log(cell)
+        }
+
+
+    }
+
     function checkWin(cellArray, event) {
         for (let i = 0; i < cellArray.length; i++) {
             let nextCell = cellArray[i].nextElementSibling;
-            let previousCell = nextCell.previousElementSibling;
+            let previousCell = nextCell.previousElementSibling; // looks at previous cell of nextCell
             let thirdCell = nextCell.nextElementSibling;
+            // let verticalCell = getVertAndDiag(cellArray,3)
             if (nextCell.classList.contains(pick) && previousCell.classList.contains(pick) &&
                 thirdCell.classList.contains(pick)) {
-                console.log(previousCell);
-                console.log(nextCell);
-                console.log(thirdCell);
-            } else {
-                console.log('no cell before me');
+                    console.log(`${pick} wins`)
+                // win
             }
+
+
         }
+
     }
     return {
         playerMove,
         pick,
-        checkWin
+        checkWin,
+        getVertAndDiag
 
     }
 }
@@ -119,70 +130,49 @@ let ticTacToe = (function () {
     let playerTwo = player('X')
     let AI = aI()
 
+
     function playGame() {
         console.log('Tic-Tac-Toe is running')
 
         boardModule.gameBoardContainer.addEventListener('click', event => {
-            let cellArray = Array.from(document.getElementsByClassName('cell'))
+            playerOne.getVertAndDiag(cellArray, 3)
             if (event.target.matches('.cell')) {
                 playerTurns(event)
                 try {
                     playerOne.checkWin(cellArray, event)
-
                 } catch (err) {
                     console.log('Current cell does not have a sibling with a player symbol yet');
                 }
-                //throws an error because there is no next sibling that exists yet
-
-                //loops through each cell and checks if there is a symbol the same as player's
-                // on the next cell
-
             }
-
+            
         })
         createGame()
+        let cellArray = Array.from(document.getElementsByClassName('cell'))
+        cellArray.forEach(cell =>{
+            
+        })
     }
 
     let playerOneClick = {
         isTurn: true
     }
-    let playerTwoClick = Object.assign({
+    let playerTwoClick ={
         isTurn: false
-    })
+    }
 
     function playerTurns(event) {
-        // console.log('Check Turns\n', {
-        //     'Player One turn': playerOneClick.isTurn
-        // }, {
-        //     'Player Two turn': playerTwoClick.isTurn
-        // })
-
         if (playerOneClick.isTurn) {
             playerOne.playerMove(event)
             playerOneClick.isTurn = false;
             playerTwoClick.isTurn = true;
-
-            // console.table('click from player 1\n', {
-            //     'Player One turn': playerOneClick.isTurn
-            // }, {
-            //     'Player Two turn': playerTwoClick.isTurn
-            // })
         } else if (playerTwoClick.isTurn) {
             playerTwo.playerMove(event)
-
             // resets isTurn on both players
             playerOneClick.isTurn = true;
             playerTwoClick.isTurn = false;
-
-            // console.table('click from player 2\n', {
-            //     'Player One turn': playerOneClick.isTurn
-            // }, {
-            //     'Player Two turn': playerTwoClick.isTurn
-            // })
         }
 
     }
-
     return {
         playGame
     }
