@@ -74,6 +74,7 @@ function aI() {
 function player(pick) {
     let GameBoard = GameBoardModule
 
+
     function playerMove(e) {
         let playerID = e.target.id
         if (!e.target.matches('.cell')) return
@@ -83,10 +84,19 @@ function player(pick) {
         // aI().enemyMove()
     }
 
-    function checkWin(cell) {
-        let nextCell = cell.nextElementSibling;
-        if (nextCell.classList.contains(pick)) {
-            console.log(nextCell)
+    function checkWin(cellArray, event) {
+        for (let i = 0; i < cellArray.length; i++) {
+            let nextCell = cellArray[i].nextElementSibling;
+            let previousCell = nextCell.previousElementSibling;
+            let thirdCell = nextCell.nextElementSibling;
+            if (nextCell.classList.contains(pick) && previousCell.classList.contains(pick) &&
+                thirdCell.classList.contains(pick)) {
+                console.log(previousCell);
+                console.log(nextCell);
+                console.log(thirdCell);
+            } else {
+                console.log('no cell before me');
+            }
         }
     }
     return {
@@ -116,17 +126,18 @@ let ticTacToe = (function () {
             let cellArray = Array.from(document.getElementsByClassName('cell'))
             if (event.target.matches('.cell')) {
                 playerTurns(event)
-            }
-            //throws an error because there is no next sibling that exists yet
+                try {
+                    playerOne.checkWin(cellArray, event)
 
-
-            for (let i = 0; i < cellArray.length; i++) {
-                let nextCell = cellArray[i].nextElementSibling
-                if (nextCell.classList.contains('O')) {
-                    console.log(`next cell contains 'O' ${nextCell.id}`);
+                } catch (err) {
+                    console.log('Current cell does not have a sibling with a player symbol yet');
                 }
-            }
+                //throws an error because there is no next sibling that exists yet
 
+                //loops through each cell and checks if there is a symbol the same as player's
+                // on the next cell
+
+            }
 
         })
         createGame()
