@@ -5,9 +5,10 @@ let GameBoardModule = (() => {
     function createBoard() {
         for (let row = 0; row < 3; row++) {
             //makes a 2d array  
-            GAMEBOARD.push([row])
+            // GAMEBOARD.push([row])
+            GAMEBOARD[row] = []
             //removes the first element that includes the row elemenet
-            GAMEBOARD[row].shift(0)
+            // GAMEBOARD[row].shift(0)
             for (let col = 0; col < 3; col++) {
                 //appends each iteration of col in row array
                 GAMEBOARD[row].push(col)
@@ -27,8 +28,6 @@ let GameBoardModule = (() => {
 })()
 
 
-
-
 function aI() {
     let cells = document.getElementsByClassName('cell')
     let cellArray = Array.from(cells)
@@ -43,7 +42,9 @@ function aI() {
         let firstNum = IdRandomizer(3)
         let secondNum = IdRandomizer(3)
         let aIidentifier = `${firstNum}${secondNum}`
+
         cellArray.forEach(cell => {
+            // console.log(cell)
             if (aIidentifier == cell.id && cell.textContent == '') {
                 setTimeout(
                     () => {
@@ -72,17 +73,26 @@ function aI() {
 // MAKE 2 PLAYERS DUMBASS AHAHHAHA
 function player(pick) {
     let GameBoard = GameBoardModule
-    let GameboardContainer = GameBoard.gameBoardContainer;
-    let Ai = aI()
 
     function playerMove(e) {
         let playerID = e.target.id
         if (!e.target.matches('.cell')) return
         e.target.textContent = pick
+        e.target.classList.add(pick)
+        // console.log(e.target.classList)
+        // aI().enemyMove()
+    }
+
+    function checkWin(cell) {
+        let nextCell = cell.nextElementSibling;
+        if (nextCell.classList.contains(pick)) {
+            console.log(nextCell)
+        }
     }
     return {
         playerMove,
         pick,
+        checkWin
 
     }
 }
@@ -91,64 +101,73 @@ function player(pick) {
 
 // Do Game logic first and then after that do displayControllers
 
-let gameLogicModule = (function () {
+let ticTacToe = (function () {
     // handles the game logic
-    let cells = document.getElementsByClassName('cell')
-    let cellArray = Array.from(cells)
-
     let boardModule = GameBoardModule
     let createGame = boardModule.createBoard
     let playerOne = player('O')
     let playerTwo = player('X')
     let AI = aI()
-    
-    
-    
+
     function playGame() {
         console.log('Tic-Tac-Toe is running')
-        
-        // click in invoke click invoke click invoke
+
         boardModule.gameBoardContainer.addEventListener('click', event => {
-            if(event.target.matches('.cell')){   
+            let cellArray = Array.from(document.getElementsByClassName('cell'))
+            if (event.target.matches('.cell')) {
                 playerTurns(event)
             }
+            //throws an error because there is no next sibling that exists yet
+
+
+            for (let i = 0; i < cellArray.length; i++) {
+                let nextCell = cellArray[i].nextElementSibling
+                if (nextCell.classList.contains('O')) {
+                    console.log(`next cell contains 'O' ${nextCell.id}`);
+                }
+            }
+
+
         })
         createGame()
-        
     }
-    
-    let playerOneClick = {isTurn: true}
-    let playerTwoClick = Object.assign({isTurn:false})
 
-    function playerTurns(event,playerOneTurn = true, playerTwoTurn = false) {
-        console.log('Check Turns\n', {
-            'Player One turn': playerOneClick.isTurn
-        }, {
-            'Player Two turn': playerTwoClick.isTurn
-        })
+    let playerOneClick = {
+        isTurn: true
+    }
+    let playerTwoClick = Object.assign({
+        isTurn: false
+    })
+
+    function playerTurns(event) {
+        // console.log('Check Turns\n', {
+        //     'Player One turn': playerOneClick.isTurn
+        // }, {
+        //     'Player Two turn': playerTwoClick.isTurn
+        // })
 
         if (playerOneClick.isTurn) {
             playerOne.playerMove(event)
             playerOneClick.isTurn = false;
             playerTwoClick.isTurn = true;
 
-            console.table('click from player 1\n', {
-                'Player One turn': playerOneClick.isTurn
-            }, {
-                'Player Two turn': playerTwoClick.isTurn
-            })
-        } else if(playerTwoClick.isTurn) {
+            // console.table('click from player 1\n', {
+            //     'Player One turn': playerOneClick.isTurn
+            // }, {
+            //     'Player Two turn': playerTwoClick.isTurn
+            // })
+        } else if (playerTwoClick.isTurn) {
             playerTwo.playerMove(event)
 
             // resets isTurn on both players
             playerOneClick.isTurn = true;
             playerTwoClick.isTurn = false;
 
-            console.table('click from player 2\n', {
-                'Player One turn': playerOneClick.isTurn
-            }, {
-                'Player Two turn': playerTwoClick.isTurn
-            })
+            // console.table('click from player 2\n', {
+            //     'Player One turn': playerOneClick.isTurn
+            // }, {
+            //     'Player Two turn': playerTwoClick.isTurn
+            // })
         }
 
     }
@@ -158,7 +177,7 @@ let gameLogicModule = (function () {
     }
 })()
 
-gameLogicModule.playGame()
+ticTacToe.playGame()
 
 let displayControllers = (function () {
     // handles the display in browser
