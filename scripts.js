@@ -70,27 +70,26 @@ function aI() {
 
 function player(pick) {
     let GameBoard = GameBoardModule
-
-
+    let marks = pick
+    
     function playerMove(e) {
         let playerID = e.target.id
         if (!e.target.matches('.cell')) return
-        e.target.textContent = pick
-        e.target.classList.add(pick)
+        e.target.textContent = marks
+        e.target.classList.add(marks)
         setColor(e)
         
         // console.log(e.target.classList)
         // aI().enemyMove()
     }
     function setColor(event){
-        if(pick == 'O'){
-            event.target.setAttribute('style','background-color:#fb4934')
-            console.log('change color')
-        }else if(pick == 'X'){
-            event.target.setAttribute('style','background-color:#83a598')
-        }
+        // if(marks == 'O'){
+        //     event.target.setAttribute('style','background-color:#fb4934')
+        //     console.log('change color')
+        // }else if(marks == 'X'){
+        //     event.target.setAttribute('style','background-color:#83a598')
+        // }
     }
-
 
     function checkWin(cellArray, event) {
         for (let i = 0; i < cellArray.length; i++) {
@@ -98,17 +97,21 @@ function player(pick) {
             let previousCell = nextCell.previousElementSibling; // looks at previous cell of nextCell
             let thirdCell = nextCell.nextElementSibling;
 
-            if (nextCell.classList.contains(pick) && previousCell.classList.contains(pick) &&
-                thirdCell.classList.contains(pick)) {
-                    console.log(`${pick} wins`)
+            if (nextCell.classList.contains(marks) && previousCell.classList.contains(marks) &&
+                thirdCell.classList.contains(marks)) {
+                    console.log(`${marks} wins`)
             }
         }
 
     }
+
+
+    
     return {
         playerMove,
         pick,
-        checkWin,
+        marks,
+        checkWin
 
     }
 }
@@ -121,6 +124,7 @@ let ticTacToe = (function () {
     // handles the game logic
     let boardModule = GameBoardModule
     let createGame = boardModule.createBoard
+    let allPlayer = player()
     let playerOne = player('O')
     let playerTwo = player('X')
     let AI = aI()
@@ -136,32 +140,41 @@ let ticTacToe = (function () {
 
         // giving each cell a function that returns the current cell and loops 
         //through cell array starting from the current cell
-        function getVertAndDiag(arr,nth,startingPoint){
+        function getVertAndDiag(arr,nth,sP){
             let vertCell = []
             for(let i = 0; i < arr.length;i += nth){
-                var indx = (i + startingPoint) % cellArray.length;
+                var indx = (i + sP) % cellArray.length;
                 vertCell.push(arr[indx])
             }
             return vertCell
         }
-
+        
+        // loop through cellArray with startingpoint this funtion is for checking
+        // each cell
         cellArray.forEach(cell=>{
             cell.addEventListener('click', (e)=>{
-                try {
+                try {            
                     let startingPoint = cellArray.indexOf(cell)
                     let verticalCell = getVertAndDiag(cellArray,3,startingPoint)     
-                    console.log(verticalCell[0])
                     for(let i = 0;i < cellArray.length; i++){
+                        //indx var is a starting point for where to start looping
                         var indx = (i + startingPoint) % cellArray.length;
+                        // console.log(verticalCell[i])
                         // cellArray[indx].setAttribute('style','background-color:red')
+                        
+                        verticalCell[i].setAttribute('style','background-color:pink')
+                        if(verticalCell[1].classList.contains('O')){
+                            console.log('ah')
+                        }
                     }
                     } catch (error) {
-                        console.log('stops looping at the end of the array');
+                        console.log( 'Looping enitre array')
                     }
             })
         })
 
 
+        //playercontroller
         boardModule.gameBoardContainer.addEventListener('click', event => {            
             if (event.target.matches('.cell')) {
                 playerTurns(event)
