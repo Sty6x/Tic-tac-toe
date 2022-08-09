@@ -123,10 +123,19 @@ let ticTacToe = (function () {
         // cellArrays available after createGame is invoked
         let cellArray = Array.from(document.getElementsByClassName('cell'))
         // console.log(boardModule.gameBoardContainer.children.length)
+        // giving each cell a function that returns the current cell and loops 
+        //through cell array starting from the current cell
         cellArray.forEach(cell=>{
             cell.addEventListener('click', (e)=>{
 
-                console.log(cellArray.indexOf(cell) )
+                // console.log(cellArray.indexOf(cell) )
+                // cell.setAttribute('style','background-color:red')
+                let startingPoint = cellArray.indexOf(cell)
+                for(let i = 0;i < cellArray.length; i++){
+                    var indx = (i + startingPoint) % cellArray.length +1;
+                    console.log(cellArray[indx])
+                    cellArray[indx].setAttribute('style','background-color:red')
+                }
             })
         })
 
