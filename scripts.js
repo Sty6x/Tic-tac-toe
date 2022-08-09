@@ -82,30 +82,17 @@ function player(pick) {
         // aI().enemyMove()
     }
 
-    function getVertAndDiag(arr, nth) {
-        // let cell = [];
-        let cell;
-        for (let i = 0; i < arr.length; i += nth) {
-            cell = arr[i]
-            console.log(cell)
-        }
-
-
-    }
 
     function checkWin(cellArray, event) {
         for (let i = 0; i < cellArray.length; i++) {
             let nextCell = cellArray[i].nextElementSibling;
             let previousCell = nextCell.previousElementSibling; // looks at previous cell of nextCell
             let thirdCell = nextCell.nextElementSibling;
-            // let verticalCell = getVertAndDiag(cellArray,3)
+
             if (nextCell.classList.contains(pick) && previousCell.classList.contains(pick) &&
                 thirdCell.classList.contains(pick)) {
                     console.log(`${pick} wins`)
-                // win
             }
-
-
         }
 
     }
@@ -113,7 +100,6 @@ function player(pick) {
         playerMove,
         pick,
         checkWin,
-        getVertAndDiag
 
     }
 }
@@ -133,9 +119,19 @@ let ticTacToe = (function () {
 
     function playGame() {
         console.log('Tic-Tac-Toe is running')
+        createGame()
+        // cellArrays available after createGame is invoked
+        let cellArray = Array.from(document.getElementsByClassName('cell'))
+        // console.log(boardModule.gameBoardContainer.children.length)
+        cellArray.forEach(cell=>{
+            cell.addEventListener('click', (e)=>{
+
+                console.log(cellArray.indexOf(cell) )
+            })
+        })
 
         boardModule.gameBoardContainer.addEventListener('click', event => {
-            playerOne.getVertAndDiag(cellArray, 3)
+            
             if (event.target.matches('.cell')) {
                 playerTurns(event)
                 try {
@@ -146,11 +142,9 @@ let ticTacToe = (function () {
             }
             
         })
-        createGame()
-        let cellArray = Array.from(document.getElementsByClassName('cell'))
-        cellArray.forEach(cell =>{
-            
-        })
+
+
+
     }
 
     let playerOneClick = {
