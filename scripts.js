@@ -127,10 +127,11 @@ let ticTacToe = (function () {
 
         // giving each cell a function that returns the current cell and loops 
         //through cell array starting from the current cell
-        function getVertAndDiag(arr,nth){
+        function getVertAndDiag(arr,nth,startingPoint){
             let cell = []
             for(let i = 0; i < arr.length;i += nth){
-                cell.push(arr[i])
+                var indx = (i + startingPoint) % cellArray.length;
+                cell.push(arr[indx])
             }
             return cell
         }
@@ -146,8 +147,10 @@ let ticTacToe = (function () {
                         //  get back to this we actually want to loop through every 3rd 
                         // cell for vertical and every 4th cell for diagonal
                         //  STARTING from the cell we clicked on. 
-                        var indx = (i + startingPoint) % cellArray.length +1;
+                        var indx = (i + startingPoint) % cellArray.length;
                         console.log(cellArray[indx])
+                        console.log(getVertAndDiag(cellArray,3,startingPoint))
+
                         cellArray[indx].setAttribute('style','background-color:red')
                     }
                     } catch (error) {
