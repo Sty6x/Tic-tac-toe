@@ -44,7 +44,6 @@ function aI() {
         let aIidentifier = `${firstNum}${secondNum}`
 
         cellArray.forEach(cell => {
-            // console.log(cell)
             if (aIidentifier == cell.id && cell.textContent == '') {
                 setTimeout(
                     () => {
@@ -78,8 +77,18 @@ function player(pick) {
         if (!e.target.matches('.cell')) return
         e.target.textContent = pick
         e.target.classList.add(pick)
+        setColor(e)
+        
         // console.log(e.target.classList)
         // aI().enemyMove()
+    }
+    function setColor(event){
+        if(pick == 'O'){
+            event.target.setAttribute('style','background-color:#fb4934')
+            console.log('change color')
+        }else if(pick == 'X'){
+            event.target.setAttribute('style','background-color:#83a598')
+        }
     }
 
 
@@ -132,23 +141,19 @@ let ticTacToe = (function () {
             for(let i = 0; i < arr.length;i += nth){
                 var indx = (i + startingPoint) % cellArray.length;
                 vertCell.push(arr[indx])
-                // console.log(classList)
             }
-
             return vertCell
         }
-        // console.log(getVertAndDiag(cellArray,3))
 
         cellArray.forEach(cell=>{
             cell.addEventListener('click', (e)=>{
-                // cell.setAttribute('style','background-color:green')
                 try {
                     let startingPoint = cellArray.indexOf(cell)
                     let verticalCell = getVertAndDiag(cellArray,3,startingPoint)     
+                    console.log(verticalCell[0])
                     for(let i = 0;i < cellArray.length; i++){
                         var indx = (i + startingPoint) % cellArray.length;
-                        cellArray[indx].setAttribute('style','background-color:red')
-                        console.log(cellArray[indx])
+                        // cellArray[indx].setAttribute('style','background-color:red')
                     }
                     } catch (error) {
                         console.log('stops looping at the end of the array');
@@ -156,8 +161,8 @@ let ticTacToe = (function () {
             })
         })
 
-        boardModule.gameBoardContainer.addEventListener('click', event => {
-            
+
+        boardModule.gameBoardContainer.addEventListener('click', event => {            
             if (event.target.matches('.cell')) {
                 playerTurns(event)
                 try {
@@ -201,5 +206,5 @@ let ticTacToe = (function () {
 ticTacToe.playGame()
 
 let displayControllers = (function () {
-    // handles the display in browser
+
 })()
