@@ -141,39 +141,39 @@ let ticTacToe = (function () {
         // cellArrays available after createGame is invoked
         let cellArray = Array.from(document.getElementsByClassName('cell'))
 
-        // for vertical and diagonal
 
-        // loop through cellArray with startingpoint this funtion is for checking
-        // each cell
-        // adding a function for each cell 
-        // and on every CLICK we invoke the function
-        function getVertAndDiag(arr, nth, cell) {
-            let vertCell = []
-            let startingPoint = cellArray.indexOf(cell)
-            // console.log(startingPoint)
+        function getVertAndDiag(arr, cell, nth) {
+            let startingPoint = arr.indexOf(cell)
+            let thirdCell = [];
+            // i+=3 iterates every third cell
+            // 0 + 3 = 3 
+            // 1 + 3 = 4
             for (let i = 0; i < arr.length; i += nth) {
-                let thirdCell = (i + startingPoint) % cellArray.length;
-                // console.log(thirdCell)
-                vertCell.push(arr[thirdCell])
+                let getThirdCell = (i + startingPoint) % arr.length
+                thirdCell.push(arr[getThirdCell])
             }
-            return vertCell
+            return thirdCell
         }
 
-        cellArray.forEach(cell => {
-            let vertCell = getVertAndDiag(cellArray, 3, cell)
-            cell.addEventListener('click', (e) => {
-                for (const thCell of vertCell) {
-                    thCell.setAttribute('style', 'background-color:pink')
-                    var hasMark = vertCell.every(() => {
-                        if (thCell.classList.contains('O')) {
+            // problem
+            cellArray.forEach(cell => {
+                cell.addEventListener('click',(e)=>{
+                    let thirdCells = getVertAndDiag(cellArray, cell, 3)
+                    let hasMark = cellArray.every(()=>{
+                        if (thirdCells[1].classList.contains('O') && thirdCells[1].classList.contains('O')
+                        && thirdCells[2].classList.contains('O')
+                        ) {
                             return true
                         }
                     })
+                    console.log(thirdCells[1])
                     console.log(hasMark)
-                }
-                
+                    console.log(cell)
+                })
             })
-        })
+        // problem
+        // dont erase this
+        // .setAttribute('style', 'background-color:pink')
 
 
 
@@ -182,6 +182,7 @@ let ticTacToe = (function () {
         boardModule.gameBoardContainer.addEventListener('click', event => {
             if (event.target.matches('.cell')) {
                 playerTurns(event)
+                // loopThirdCell()
                 try {
                     playerOne.checkWin(cellArray, event)
                 } catch (err) {
