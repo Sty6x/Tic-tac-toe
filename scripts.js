@@ -102,7 +102,6 @@ function player(pick) {
 
             if (nextCell.classList.contains(pick) && previousCell.classList.contains(pick) &&
                 thirdCell.classList.contains(pick)) {
-
                 return true
             }
         }
@@ -117,14 +116,11 @@ function player(pick) {
             thirdCell.push(arr[getThirdCell])
         }
 
-        // problem
-        // doesn't check the [0] if it hast the same class    
-        if(thirdCell[1].classList.contains(pick) && thirdCell[1].classList.contains(pick)
-        && thirdCell[2].classList.contains(pick)){
+        if (thirdCell[0].classList.contains(pick) && thirdCell[1].classList.contains(pick) &&
+            thirdCell[2].classList.contains(pick)) {
             return true
         }
     }
-
     return {
         playerMove,
         pick,
@@ -145,24 +141,30 @@ let ticTacToe = (function () {
     let playerOne = player('O')
     let playerTwo = player('X')
     let AI = aI()
-
+    let playerOneClick = {
+        isTurn: true
+    }
+    let playerTwoClick = {
+        isTurn: false
+    }
 
     function playGame() {
         console.log('Tic-Tac-Toe is running')
         createGame()
-        // cellArrays available after createGame is invoked
         let cellArray = Array.from(document.getElementsByClassName('cell'))
-
-
-      
-        
+        let announcer = document.getElementById('announcer')
         //playercontroller
         cellArray.forEach(cell => {
             cell.addEventListener('click', (e) => {
                 playerTurns(e)
                 try {
-                    console.log(playerOne.checkVertical(cellArray,cell,3))
-                    console.log(playerOne.checkHorizontal(cellArray))
+                    if (
+                        playerOne.checkVertical(cellArray, cell, 3) ||
+                        playerOne.checkHorizontal(cellArray)
+                    ){
+                        console.log('player one wins')
+                        announcer.textContent = 'player one wins'
+                    }
                 } catch (err) {
                     console.log('Current cell does not have a sibling with a player symbol yet');
                 }
@@ -171,12 +173,6 @@ let ticTacToe = (function () {
 
     }
 
-    let playerOneClick = {
-        isTurn: true
-    }
-    let playerTwoClick = {
-        isTurn: false
-    }
 
     function playerTurns(event) {
         if (playerOneClick.isTurn) {
