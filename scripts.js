@@ -77,26 +77,20 @@ function player(pick) {
         e.target.textContent = pick
         e.target.classList.add(pick)
         setColor(e)
-
-        // console.log(e.target.classList)
-        // aI().enemyMove()
     }
 
     function setColor(event) {
-        // if (pick == 'O') {
-        //     event.target.setAttribute('style', 'background-color:#fb4934')
-        //     console.log('change color')
-        // } else if (pick == 'X') {
-        //     event.target.setAttribute('style', 'background-color:#83a598')
-        // }
+        if (pick == 'O') {
+            event.target.setAttribute('style', 'background-color:#fb4934')
+            console.log('change color')
+        } else if (pick == 'X') {
+            event.target.setAttribute('style', 'background-color:#83a598')
+        }
     }
 
 
-    // giving each cell a function that returns the current cell and loops 
-    //through cell array starting from the current cell
 
-
-    function checkWin(cellArray, event) {
+    function checkWinHorizontal(cellArray) {
         // checks horizontally
         // working
         for (let i = 0; i < cellArray.length; i++) {
@@ -106,18 +100,34 @@ function player(pick) {
 
             if (nextCell.classList.contains(pick) && previousCell.classList.contains(pick) &&
                 thirdCell.classList.contains(pick)) {
-                console.log(`${pick} wins`)
+                    nextCell.setAttribute
+                return true
             }
         }
 
     }
 
+    function checkWinVertical(arr, cell, nth) {
+        let startingPoint = arr.indexOf(cell)
+        let thirdCell = [];
+        for (let i = 0; i < arr.length; i += nth) {
+            let getThirdCell = (i + startingPoint) % arr.length
+            thirdCell.push(arr[getThirdCell])
+        }
 
+        // problem
+        // doesn't check the [0] if it hast the same class    
+        if(thirdCell[1].classList.contains(pick) && thirdCell[1].classList.contains(pick)
+        && thirdCell[2].classList.contains(pick)){
+            return true
+        }
+    }
 
     return {
         playerMove,
         pick,
-        checkWin
+        checkWinHorizontal,
+        checkWinVertical
 
     }
 }
@@ -142,58 +152,23 @@ let ticTacToe = (function () {
         let cellArray = Array.from(document.getElementsByClassName('cell'))
 
 
-        function getVertAndDiag(arr, cell, nth) {
-            let startingPoint = arr.indexOf(cell)
-            let thirdCell = [];
-            // i+=3 iterates every third cell
-            // 0 + 3 = 3 
-            // 1 + 3 = 4
-            for (let i = 0; i < arr.length; i += nth) {
-                let getThirdCell = (i + startingPoint) % arr.length
-                thirdCell.push(arr[getThirdCell])
-            }
-            return thirdCell
-        }
-
-            // problem
-            cellArray.forEach(cell => {
-                cell.addEventListener('click',(e)=>{
-                    let thirdCells = getVertAndDiag(cellArray, cell, 3)
-                    let hasMark = cellArray.every(()=>{
-                        if (thirdCells[1].classList.contains('O') && thirdCells[1].classList.contains('O')
-                        && thirdCells[2].classList.contains('O')
-                        ) {
-                            return true
-                        }
-                    })
-                    console.log(thirdCells[1])
-                    console.log(hasMark)
-                    console.log(cell)
-                })
-            })
-        // problem
-        // dont erase this
-        // .setAttribute('style', 'background-color:pink')
-
-
-
-
+      
+        
         //playercontroller
-        boardModule.gameBoardContainer.addEventListener('click', event => {
-            if (event.target.matches('.cell')) {
-                playerTurns(event)
-                // loopThirdCell()
+        cellArray.forEach(cell => {
+            cell.addEventListener('click', (e) => {
+                playerTurns(e)
                 try {
-                    playerOne.checkWin(cellArray, event)
+                    console.log(playerOne.checkWinVertical(cellArray,cell,3))
+                    console.log(playerOne.checkWinHorizontal(cellArray))
                 } catch (err) {
                     console.log('Current cell does not have a sibling with a player symbol yet');
                 }
-            }
-
+            })
         })
-
-
-
+        // problem
+        // dont erase this
+        // .setAttribute('style', 'background-color:pink')
     }
 
     let playerOneClick = {
