@@ -70,47 +70,53 @@ function aI() {
 
 function player(pick) {
     let GameBoard = GameBoardModule
-    let marks = pick
-    
+
     function playerMove(e) {
         let playerID = e.target.id
         if (!e.target.matches('.cell')) return
-        e.target.textContent = marks
-        e.target.classList.add(marks)
+        e.target.textContent = pick
+        e.target.classList.add(pick)
         setColor(e)
-        
+
         // console.log(e.target.classList)
         // aI().enemyMove()
     }
-    function setColor(event){
-        // if(marks == 'O'){
-        //     event.target.setAttribute('style','background-color:#fb4934')
+
+    function setColor(event) {
+        // if (pick == 'O') {
+        //     event.target.setAttribute('style', 'background-color:#fb4934')
         //     console.log('change color')
-        // }else if(marks == 'X'){
-        //     event.target.setAttribute('style','background-color:#83a598')
+        // } else if (pick == 'X') {
+        //     event.target.setAttribute('style', 'background-color:#83a598')
         // }
     }
 
+
+    // giving each cell a function that returns the current cell and loops 
+    //through cell array starting from the current cell
+
+
     function checkWin(cellArray, event) {
+        // checks horizontally
+        // working
         for (let i = 0; i < cellArray.length; i++) {
             let nextCell = cellArray[i].nextElementSibling;
             let previousCell = nextCell.previousElementSibling; // looks at previous cell of nextCell
             let thirdCell = nextCell.nextElementSibling;
 
-            if (nextCell.classList.contains(marks) && previousCell.classList.contains(marks) &&
-                thirdCell.classList.contains(marks)) {
-                    console.log(`${marks} wins`)
+            if (nextCell.classList.contains(pick) && previousCell.classList.contains(pick) &&
+                thirdCell.classList.contains(pick)) {
+                console.log(`${pick} wins`)
             }
         }
 
     }
 
 
-    
+
     return {
         playerMove,
         pick,
-        marks,
         checkWin
 
     }
@@ -124,7 +130,6 @@ let ticTacToe = (function () {
     // handles the game logic
     let boardModule = GameBoardModule
     let createGame = boardModule.createBoard
-    let allPlayer = player()
     let playerOne = player('O')
     let playerTwo = player('X')
     let AI = aI()
@@ -138,44 +143,43 @@ let ticTacToe = (function () {
 
         // for vertical and diagonal
 
-        // giving each cell a function that returns the current cell and loops 
-        //through cell array starting from the current cell
-        function getVertAndDiag(arr,nth,sP){
+        // loop through cellArray with startingpoint this funtion is for checking
+        // each cell
+        // adding a function for each cell 
+        // and on every CLICK we invoke the function
+        function getVertAndDiag(arr, nth, cell) {
             let vertCell = []
-            for(let i = 0; i < arr.length;i += nth){
-                var indx = (i + sP) % cellArray.length;
-                vertCell.push(arr[indx])
+            let startingPoint = cellArray.indexOf(cell)
+            // console.log(startingPoint)
+            for (let i = 0; i < arr.length; i += nth) {
+                let thirdCell = (i + startingPoint) % cellArray.length;
+                // console.log(thirdCell)
+                vertCell.push(arr[thirdCell])
             }
             return vertCell
         }
-        
-        // loop through cellArray with startingpoint this funtion is for checking
-        // each cell
-        cellArray.forEach(cell=>{
-            cell.addEventListener('click', (e)=>{
-                try {            
-                    let startingPoint = cellArray.indexOf(cell)
-                    let verticalCell = getVertAndDiag(cellArray,3,startingPoint)     
-                    for(let i = 0;i < cellArray.length; i++){
-                        //indx var is a starting point for where to start looping
-                        var indx = (i + startingPoint) % cellArray.length;
-                        // console.log(verticalCell[i])
-                        // cellArray[indx].setAttribute('style','background-color:red')
-                        
-                        verticalCell[i].setAttribute('style','background-color:pink')
-                        if(verticalCell[1].classList.contains('O')){
-                            console.log('ah')
+
+        cellArray.forEach(cell => {
+            let vertCell = getVertAndDiag(cellArray, 3, cell)
+            cell.addEventListener('click', (e) => {
+                for (const thCell of vertCell) {
+                    thCell.setAttribute('style', 'background-color:pink')
+                    var hasMark = vertCell.every(() => {
+                        if (thCell.classList.contains('O')) {
+                            return true
                         }
-                    }
-                    } catch (error) {
-                        console.log( 'Looping enitre array')
-                    }
+                    })
+                    console.log(hasMark)
+                }
+                
             })
         })
 
 
+
+
         //playercontroller
-        boardModule.gameBoardContainer.addEventListener('click', event => {            
+        boardModule.gameBoardContainer.addEventListener('click', event => {
             if (event.target.matches('.cell')) {
                 playerTurns(event)
                 try {
@@ -184,7 +188,7 @@ let ticTacToe = (function () {
                     console.log('Current cell does not have a sibling with a player symbol yet');
                 }
             }
-            
+
         })
 
 
@@ -194,7 +198,7 @@ let ticTacToe = (function () {
     let playerOneClick = {
         isTurn: true
     }
-    let playerTwoClick ={
+    let playerTwoClick = {
         isTurn: false
     }
 
