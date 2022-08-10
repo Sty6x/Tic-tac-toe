@@ -90,7 +90,9 @@ function player(pick) {
 
 
 
-    function checkWinHorizontal(cellArray) {
+    // im cheating
+
+    function checkHorizontal(cellArray) {
         // checks horizontally
         // working
         for (let i = 0; i < cellArray.length; i++) {
@@ -100,14 +102,14 @@ function player(pick) {
 
             if (nextCell.classList.contains(pick) && previousCell.classList.contains(pick) &&
                 thirdCell.classList.contains(pick)) {
-                    nextCell.setAttribute
+
                 return true
             }
         }
 
     }
 
-    function checkWinVertical(arr, cell, nth) {
+    function checkVertical(arr, cell, nth) {
         let startingPoint = arr.indexOf(cell)
         let thirdCell = [];
         for (let i = 0; i < arr.length; i += nth) {
@@ -126,8 +128,8 @@ function player(pick) {
     return {
         playerMove,
         pick,
-        checkWinHorizontal,
-        checkWinVertical
+        checkHorizontal,
+        checkVertical
 
     }
 }
@@ -159,16 +161,14 @@ let ticTacToe = (function () {
             cell.addEventListener('click', (e) => {
                 playerTurns(e)
                 try {
-                    console.log(playerOne.checkWinVertical(cellArray,cell,3))
-                    console.log(playerOne.checkWinHorizontal(cellArray))
+                    console.log(playerOne.checkVertical(cellArray,cell,3))
+                    console.log(playerOne.checkHorizontal(cellArray))
                 } catch (err) {
                     console.log('Current cell does not have a sibling with a player symbol yet');
                 }
             })
         })
-        // problem
-        // dont erase this
-        // .setAttribute('style', 'background-color:pink')
+
     }
 
     let playerOneClick = {
