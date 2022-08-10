@@ -69,28 +69,31 @@ header{
 	color: white;
 	font-size: 2rem;
 }
-#announcer{
-	font-size: 2rem;
-}
 
 .main-wrapper{
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	margin-top: 3em;
+	margin-top: 8em;
 	padding: 2em;
-	gap: 4em;
+	/* gap: 4em; */
+}
+#announcer{
+	position: absolute;
+	/* padding: .5em; */
+	font-size: 1.5rem;
+	top: 6em;
 }
 
 #game-board-container{
     display: grid;
     grid-template-columns: repeat(3,minmax(100px,1fr));
     grid-template-rows: repeat(3,minmax(100px,1fr));
-	width: 600px;
-	height: 600px;
 	border: #282828 7px solid;
 	border-radius: 6px;
+	width: 600px; 
+	height: 600px;
 }
 
 .cell{
