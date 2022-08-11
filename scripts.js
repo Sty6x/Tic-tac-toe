@@ -30,23 +30,6 @@ let GameBoardModule = (() => {
 
 
 
-let displayControllers = (function () {
-    let game = GameBoardModule
-    let gameContainer = game.gameBoardContainer
-    let mainWrapper = document.getElementById('main-wrapper')
-    let playButton = document.createElement('button')
-    mainWrapper.appendChild(playButton)
-    playButton.textContent = 'Play Game'
-    playButton.setAttribute('id', 'play-game')
-    mainWrapper.removeChild(gameContainer)
-    playButton.addEventListener('click', () => {
-        mainWrapper.appendChild(gameContainer)
-        mainWrapper.removeChild(playButton)
-        ticTacToe.playGame()
-    })
-
-
-})()
 
 
 
@@ -168,8 +151,7 @@ function player(pick) {
 
 
 
-// Do Game logic first and then after that do displayControllers
-
+//Game logic
 let ticTacToe = (function () {
     // handles the game logic
     let boardModule = GameBoardModule
@@ -183,12 +165,15 @@ let ticTacToe = (function () {
     let playerTwoClick = {
         isTurn: false
     }
+    let isGameOver = false
 
     function playGame() {
         console.log('Tic-Tac-Toe is running')
         createGame()
         let cellArray = Array.from(document.getElementsByClassName('cell'))
         let announcer = document.getElementById('announcer')
+
+
         //playercontroller
         cellArray.forEach(cell => {
             cell.addEventListener('click', (e) => {
@@ -198,20 +183,21 @@ let ticTacToe = (function () {
                     playerOne.checkDiagonal(cellArray) ||
                     playerOne.checkHorizontal(cellArray)
                 ) {
+                    isGameOver = true
                     console.log('player one wins')
                     announcer.textContent = 'player one wins'
+                    // console.log(isGameOver)
                 } else if (
                     playerTwo.checkVertical(cellArray, cell, 3) ||
                     playerTwo.checkDiagonal(cellArray) ||
                     playerTwo.checkHorizontal(cellArray)
                 ) {
+                    isGameOver = true
                     console.log('player two wins')
                     announcer.textContent = 'player two wins'
+                    // console.log(isGameOver)
                 }
-                // try {
-                // } catch (err) {
-                //     console.log('Current cell does not have a sibling with a player symbol yet');
-                // }
+
             })
         })
 
@@ -232,6 +218,29 @@ let ticTacToe = (function () {
 
     }
     return {
+        isGameOver,
         playGame
     }
+
+})()
+let displayControllers = (function () {
+    let game = GameBoardModule
+    let gameContainer = game.gameBoardContainer
+    let mainWrapper = document.getElementById('main-wrapper')
+    let playButton = document.createElement('button')
+    let isGameOver = ticTacToe.isGameOver
+    mainWrapper.appendChild(playButton)
+    playButton.textContent = 'Play Game'
+    playButton.setAttribute('id', 'play-game')
+    mainWrapper.removeChild(gameContainer)
+
+    playButton.addEventListener('click', () => {
+        mainWrapper.appendChild(gameContainer)
+        mainWrapper.removeChild(playButton)
+        ticTacToe.playGame()
+    })
+
+    let restartGame = document.createElement('button')
+    restartGame.setAttribute('id', 'restart-button')
+    console.log(isGameOver)
 })()
