@@ -28,6 +28,43 @@ let GameBoardModule = (() => {
     }
 })()
 
+let displayControllers = (function () {
+    let game = GameBoardModule
+    let gameContainer = game.gameBoardContainer
+    let mainWrapper = document.getElementById('main-wrapper')
+    let playButton = document.createElement('button')
+
+    mainWrapper.appendChild(playButton)
+    playButton.textContent = 'Play Game'
+    playButton.setAttribute('id', 'play-game')
+    mainWrapper.removeChild(gameContainer)
+    playButton.addEventListener('click', () => {
+        mainWrapper.appendChild(gameContainer)
+        mainWrapper.removeChild(playButton)
+        ticTacToe.playGame()
+
+
+    })
+
+    function states(isGO) {
+        let restartGame = document.createElement('button')
+        restartGame.setAttribute('id', 'restart-button')
+        if (isGO) {
+            // mainWrapper.removeChild(gameContainer)
+            mainWrapper.appendChild(restartGame)
+            restartGame.textContent = "play again?"
+            // gameContainer.setAttribute('style', 'width: 100px; height:100px;,position:absolute;, left:100px')
+        }
+        restartGame.addEventListener('click', () => {
+            location.reload();
+
+        })
+    }
+
+    return {
+        states
+    }
+})()
 
 
 
@@ -159,6 +196,7 @@ let ticTacToe = (function () {
     let playerOne = player('O')
     let playerTwo = player('X')
     let AI = aI()
+    let displayReset = displayControllers.states
     let playerOneClick = {
         isTurn: true
     }
@@ -177,7 +215,7 @@ let ticTacToe = (function () {
         //playercontroller
         cellArray.forEach(cell => {
             cell.addEventListener('click', (e) => {
-                playerTurns(e)
+                playerTurns(e,cellArray)
                 if (
                     playerOne.checkVertical(cellArray, cell, 3) ||
                     playerOne.checkDiagonal(cellArray) ||
@@ -186,7 +224,8 @@ let ticTacToe = (function () {
                     isGameOver = true
                     console.log('player one wins')
                     announcer.textContent = 'player one wins'
-                    // console.log(isGameOver)
+                    playerOne.playerMove
+                    displayReset(isGameOver)
                 } else if (
                     playerTwo.checkVertical(cellArray, cell, 3) ||
                     playerTwo.checkDiagonal(cellArray) ||
@@ -195,52 +234,32 @@ let ticTacToe = (function () {
                     isGameOver = true
                     console.log('player two wins')
                     announcer.textContent = 'player two wins'
-                    // console.log(isGameOver)
+                    displayReset(isGameOver)
                 }
-
             })
         })
 
     }
 
 
-    function playerTurns(event) {
-        if (playerOneClick.isTurn) {
-            playerOne.playerMove(event)
-            playerOneClick.isTurn = false;
-            playerTwoClick.isTurn = true;
-        } else if (playerTwoClick.isTurn) {
-            playerTwo.playerMove(event)
-            // resets isTurn on both players
-            playerOneClick.isTurn = true;
-            playerTwoClick.isTurn = false;
-        }
+    function playerTurns(event,cellarr) {
 
+        if (!isGameOver) {
+            if (playerOneClick.isTurn) {
+                playerOne.playerMove(event)
+                playerOneClick.isTurn = false;
+                playerTwoClick.isTurn = true;
+            } else if (playerTwoClick.isTurn) {
+                playerTwo.playerMove(event)
+                // resets isTurn on both players
+                playerOneClick.isTurn = true;
+                playerTwoClick.isTurn = false;
+            }
+        } 
     }
     return {
         isGameOver,
         playGame
     }
 
-})()
-let displayControllers = (function () {
-    let game = GameBoardModule
-    let gameContainer = game.gameBoardContainer
-    let mainWrapper = document.getElementById('main-wrapper')
-    let playButton = document.createElement('button')
-    let isGameOver = ticTacToe.isGameOver
-    mainWrapper.appendChild(playButton)
-    playButton.textContent = 'Play Game'
-    playButton.setAttribute('id', 'play-game')
-    mainWrapper.removeChild(gameContainer)
-
-    playButton.addEventListener('click', () => {
-        mainWrapper.appendChild(gameContainer)
-        mainWrapper.removeChild(playButton)
-        ticTacToe.playGame()
-    })
-
-    let restartGame = document.createElement('button')
-    restartGame.setAttribute('id', 'restart-button')
-    console.log(isGameOver)
 })()
