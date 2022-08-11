@@ -1,7 +1,7 @@
 # Tic-tac-toe
 
 Check it out here:
-
+https://sty6x.github.io/Tic-tac-toe/
 
 #Unfinished
 
