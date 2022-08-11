@@ -222,8 +222,8 @@ let ticTacToe = (function () {
                     playerOne.checkHorizontal(cellArray)
                 ) {
                     isGameOver = true
-                    console.log('player one wins')
-                    announcer.textContent = 'player one wins'
+                    console.log('player 0 wins')
+                    announcer.textContent = 'Player 0 Wins'
                     playerOne.playerMove
                     displayReset(isGameOver)
                 } else if (
@@ -232,8 +232,8 @@ let ticTacToe = (function () {
                     playerTwo.checkHorizontal(cellArray)
                 ) {
                     isGameOver = true
-                    console.log('player two wins')
-                    announcer.textContent = 'player two wins'
+                    console.log('player X wins')
+                    announcer.textContent = 'Player X Wins'
                     displayReset(isGameOver)
                 }
             })
