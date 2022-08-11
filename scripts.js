@@ -121,11 +121,22 @@ function player(pick) {
             return true
         }
     }
+
+    function checkDiagonal(cellArray) {
+        for (let i = 0; i < cellArray.length; i++) {
+            if (cellArray[0].classList.contains(pick) && cellArray[4].classList.contains(pick) &&
+                cellArray[8].classList.contains(pick) || cellArray[2].classList.contains(pick) && cellArray[4].classList.contains(pick) &&
+                cellArray[6].classList.contains(pick)) {
+                return true
+            }
+        }
+    }
     return {
         playerMove,
         pick,
         checkHorizontal,
-        checkVertical
+        checkVertical,
+        checkDiagonal
 
     }
 }
@@ -160,8 +171,9 @@ let ticTacToe = (function () {
                 try {
                     if (
                         playerOne.checkVertical(cellArray, cell, 3) ||
+                        playerOne.checkDiagonal(cellArray) ||
                         playerOne.checkHorizontal(cellArray)
-                    ){
+                    ) {
                         console.log('player one wins')
                         announcer.textContent = 'player one wins'
                     }
