@@ -1,7 +1,7 @@
 let GameBoardModule = (() => {
     let gameBoardContainer = document.getElementById('game-board-container')
     let GAMEBOARD = [];
-    
+
 
     function createBoard() {
         for (let row = 0; row < 3; row++) {
@@ -36,10 +36,10 @@ let displayControllers = (function () {
     let mainWrapper = document.getElementById('main-wrapper')
     let playButton = document.createElement('button')
     mainWrapper.appendChild(playButton)
-    playButton.textContent= 'Play Game'
-    playButton.setAttribute('id','play-game')
+    playButton.textContent = 'Play Game'
+    playButton.setAttribute('id', 'play-game')
     mainWrapper.removeChild(gameContainer)
-    playButton.addEventListener('click',()=>{
+    playButton.addEventListener('click', () => {
         mainWrapper.appendChild(gameContainer)
         mainWrapper.removeChild(playButton)
         ticTacToe.playGame()
@@ -112,7 +112,7 @@ function player(pick) {
 
 
 
-    
+
     function checkHorizontal(cellArray) {
         // im cheating
         for (let i = 0; i < cellArray.length; i++) {
@@ -122,9 +122,11 @@ function player(pick) {
             if (nextCell.classList.contains(pick) && previousCell.classList.contains(pick) &&
                 thirdCell.classList.contains(pick)) {
                 return true
+            } else {
+                return false
             }
-        }
 
+        }
     }
 
     function checkVertical(arr, cell, nth) {
@@ -138,6 +140,8 @@ function player(pick) {
         if (thirdCell[0].classList.contains(pick) && thirdCell[1].classList.contains(pick) &&
             thirdCell[2].classList.contains(pick)) {
             return true
+        } else {
+            return false
         }
     }
 
@@ -147,6 +151,8 @@ function player(pick) {
                 cellArray[8].classList.contains(pick) || cellArray[2].classList.contains(pick) && cellArray[4].classList.contains(pick) &&
                 cellArray[6].classList.contains(pick)) {
                 return true
+            } else {
+                return false
             }
         }
     }
@@ -187,18 +193,25 @@ let ticTacToe = (function () {
         cellArray.forEach(cell => {
             cell.addEventListener('click', (e) => {
                 playerTurns(e)
-                try {
-                    if (
-                        playerOne.checkVertical(cellArray, cell, 3) ||
-                        playerOne.checkDiagonal(cellArray) ||
-                        playerOne.checkHorizontal(cellArray)
-                    ) {
-                        console.log('player one wins')
-                        announcer.textContent = 'player one wins'
-                    }
-                } catch (err) {
-                    console.log('Current cell does not have a sibling with a player symbol yet');
+                if (
+                    playerOne.checkVertical(cellArray, cell, 3) ||
+                    playerOne.checkDiagonal(cellArray) ||
+                    playerOne.checkHorizontal(cellArray)
+                ) {
+                    console.log('player one wins')
+                    announcer.textContent = 'player one wins'
+                } else if (
+                    playerTwo.checkVertical(cellArray, cell, 3) ||
+                    playerTwo.checkDiagonal(cellArray) ||
+                    playerTwo.checkHorizontal(cellArray)
+                ) {
+                    console.log('player two wins')
+                    announcer.textContent = 'player two wins'
                 }
+                // try {
+                // } catch (err) {
+                //     console.log('Current cell does not have a sibling with a player symbol yet');
+                // }
             })
         })
 
@@ -222,4 +235,3 @@ let ticTacToe = (function () {
         playGame
     }
 })()
-
