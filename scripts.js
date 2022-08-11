@@ -111,8 +111,6 @@ function aI() {
 
 
 function player(pick) {
-    let GameBoard = GameBoardModule
-
     function playerMove(e) {
         let playerID = e.target.id
         if (!e.target.matches('.cell')) return
@@ -133,14 +131,15 @@ function player(pick) {
 
 
 
-    function checkHorizontal(cellArray) {
+    function checkHorizontal(cellArray, sp) {
         // im cheating
+        // im very sorry for this im sick
+        let startingPoint = cellArray.indexOf(sp)
         for (let i = 0; i < cellArray.length; i++) {
-            let nextCell = cellArray[i].nextElementSibling;
-            let previousCell = nextCell.previousElementSibling; // looks at previous cell of nextCell
-            let thirdCell = nextCell.nextElementSibling;
-            if (nextCell.classList.contains(pick) && previousCell.classList.contains(pick) &&
-                thirdCell.classList.contains(pick)) {
+            if (cellArray[0].classList.contains(pick) && cellArray[1].classList.contains(pick) &&
+                cellArray[2].classList.contains(pick) || cellArray[3].classList.contains(pick) && cellArray[4].classList.contains(pick) &&
+                cellArray[5].classList.contains(pick) || cellArray[6].classList.contains(pick) && cellArray[7].classList.contains(pick) &&
+                cellArray[8].classList.contains(pick)) {
                 return true
             } else {
                 return false
@@ -215,11 +214,11 @@ let ticTacToe = (function () {
         //playercontroller
         cellArray.forEach(cell => {
             cell.addEventListener('click', (e) => {
-                playerTurns(e,cellArray)
+                playerTurns(e, cellArray)
                 if (
                     playerOne.checkVertical(cellArray, cell, 3) ||
                     playerOne.checkDiagonal(cellArray) ||
-                    playerOne.checkHorizontal(cellArray)
+                    playerOne.checkHorizontal(cellArray, cell)
                 ) {
                     isGameOver = true
                     console.log('player 0 wins')
@@ -229,7 +228,7 @@ let ticTacToe = (function () {
                 } else if (
                     playerTwo.checkVertical(cellArray, cell, 3) ||
                     playerTwo.checkDiagonal(cellArray) ||
-                    playerTwo.checkHorizontal(cellArray)
+                    playerTwo.checkHorizontal(cellArray, cell)
                 ) {
                     isGameOver = true
                     console.log('player X wins')
@@ -242,7 +241,7 @@ let ticTacToe = (function () {
     }
 
 
-    function playerTurns(event,cellarr) {
+    function playerTurns(event, cellarr) {
 
         if (!isGameOver) {
             if (playerOneClick.isTurn) {
@@ -255,7 +254,7 @@ let ticTacToe = (function () {
                 playerOneClick.isTurn = true;
                 playerTwoClick.isTurn = false;
             }
-        } 
+        }
     }
     return {
         isGameOver,
