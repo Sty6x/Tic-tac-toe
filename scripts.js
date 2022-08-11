@@ -1,6 +1,7 @@
 let GameBoardModule = (() => {
     let gameBoardContainer = document.getElementById('game-board-container')
     let GAMEBOARD = [];
+    
 
     function createBoard() {
         for (let row = 0; row < 3; row++) {
@@ -26,6 +27,27 @@ let GameBoardModule = (() => {
         GAMEBOARD,
     }
 })()
+
+
+
+let displayControllers = (function () {
+    let game = GameBoardModule
+    let gameContainer = game.gameBoardContainer
+    let mainWrapper = document.getElementById('main-wrapper')
+    let playButton = document.createElement('button')
+    mainWrapper.appendChild(playButton)
+    playButton.textContent= 'Play Game'
+    playButton.setAttribute('id','play-game')
+    mainWrapper.removeChild(gameContainer)
+    playButton.addEventListener('click',()=>{
+        mainWrapper.appendChild(gameContainer)
+        mainWrapper.removeChild(playButton)
+        ticTacToe.playGame()
+    })
+
+
+})()
+
 
 
 function aI() {
@@ -90,16 +112,13 @@ function player(pick) {
 
 
 
-    // im cheating
-
+    
     function checkHorizontal(cellArray) {
-        // checks horizontally
-        // working
+        // im cheating
         for (let i = 0; i < cellArray.length; i++) {
             let nextCell = cellArray[i].nextElementSibling;
             let previousCell = nextCell.previousElementSibling; // looks at previous cell of nextCell
             let thirdCell = nextCell.nextElementSibling;
-
             if (nextCell.classList.contains(pick) && previousCell.classList.contains(pick) &&
                 thirdCell.classList.contains(pick)) {
                 return true
@@ -204,8 +223,3 @@ let ticTacToe = (function () {
     }
 })()
 
-ticTacToe.playGame()
-
-let displayControllers = (function () {
-
-})()
